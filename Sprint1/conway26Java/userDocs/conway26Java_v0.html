@@ -63,7 +63,7 @@ Realizzazione del  in Java del
 			
 		int getRowsNum(); // Primitiva
 		int getColsNum(); // Primitiva
-		ICell getCell(int x, int y); // Primitiva
+		ICell getCell(int x, int y) throws IndexOutOfBoundsException; // Primitiva
 		void reset(); // Non primitiva
 			
 	}
@@ -79,13 +79,114 @@ Realizzazione del  in Java del
 Il test di un'implementazione di ICell potrebbe svilupparsi nel seguente modo: data c una cella di tipo ICell, se passo true a c.setStatus 
 il valore passato c.isAlive() mi deve ritornare vero, se passo false c.isAlive mi deve ritornare false.
 
+public class CellTest {
+	
+	private ICell c;
+	
+	@Before
+	public void setup() {
+		System.out.println("ConwayLifeTest | setup");
+		c = new Cell();
+	}
+
+	@After
+	public void down() {
+		System.out.println("ConwayLifeTest | down");
+	}
+	
+	
+	@Test
+	public void testCellAlive() {
+		c.setStatus(true);
+		boolean r = c.isAlive();
+		assertTrue(r);
+	}
+	
+	@Test
+	public void testCellDead() {
+		c.setStatus(false);
+		boolean r = c.isAlive();
+		assertFalse(r);
+	}
+	
+
+}
+
 Per quanto riguarda la griglia dobbiamo verificare che il metodo getCell() ritorni tutte celle con riferimenti differenti e nessun riferimento nullo.
 Setto il valore della cella e controllo se getCell mi ritorna il valore corretto.
 Reset controllo che tutte le celle siano al valore iniziale.
 Gestire il caso in cui le coordinate siano fuori dai bordi.
 g.getRowsNum e g.getColsNum devono ritornare un valore maggiore o uguale di 0.
 
+<pre>
+	public class GridTest {
+		
+		private int rows = 4;
+		private int cols = 5;
 
+		
+		private IGrid grid;
+		
+		@Before
+		public void setup() {
+			grid = new Grid(rows, cols);
+		}
+		
+		@Test
+		public void test_getRowsNum() {
+			assertTrue(grid.getRowsNum() == rows);
+		}
+		
+		@Test
+		public void test_getColsNum() {
+			assertTrue(grid.getColsNum() == cols);
+		}
+		
+		@Test
+		public void test_all_cells_different() {
+			Set<ICell> set = Collections.newSetFromMap(new IdentityHashMap<>());
+			for(int y = 0; y < cols; y++) {
+				for (int x = 0; x < rows; x++) {
+					set.add(grid.getCell(x, y));
+				}
+			}
+			assertTrue(set.size() == rows * cols);
+		}
+		
+		@Test
+		public void test_all_cells_not_null() {
+			for(int y = 0; y < cols; y++) {
+				for (int x = 0; x < rows; x++) {
+					ICell cell = grid.getCell(x, y);
+					assertNotNull(cell);
+				}
+			}
+		}
+		
+		
+		@Test
+		public void test_get_cell() {
+			ICell c = grid.getCell(1, 1);
+			c.setStatus(true);
+			assertTrue(grid.getCell(1, 1).isAlive());
+		}
+		
+		@Test
+		public void test_reset() {
+			grid.getCell(1, 1).setStatus(true);
+			grid.getCell(2, 2).setStatus(true);
+			grid.getCell(3, 3).setStatus(true);
+			grid.reset();
+			for(int j = 0; j < cols; j++) {
+				for(int i = 0; i < rows; i++) {
+					assertFalse(grid.getCell(i, j).isAlive());
+				}
+			}
+			
+		}
+		
+	}
+</pre>
 
 
 
