@@ -1,5 +1,6 @@
 package main.java.test;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -28,6 +29,16 @@ public class GridTest {
 	}
 	
 	@Test
+	public void test_getRowsNum() {
+		assertTrue(grid.getRowsNum() == rows);
+	}
+	
+	@Test
+	public void test_getColsNum() {
+		assertTrue(grid.getColsNum() == cols);
+	}
+	
+	@Test
 	public void test_all_cells_different() {
 		Set<ICell> set = Collections.newSetFromMap(new IdentityHashMap<>());
 		for(int y = 0; y < cols; y++) {
@@ -46,6 +57,28 @@ public class GridTest {
 				assertNotNull(cell);
 			}
 		}
+	}
+	
+	
+	@Test
+	public void test_get_cell() {
+		ICell c = grid.getCell(1, 1);
+		c.setStatus(true);
+		assertTrue(grid.getCell(1, 1).isAlive());
+	}
+	
+	@Test
+	public void test_reset() {
+		grid.getCell(1, 1).setStatus(true);
+		grid.getCell(2, 2).setStatus(true);
+		grid.getCell(3, 3).setStatus(true);
+		grid.reset();
+		for(int j = 0; j < cols; j++) {
+			for(int i = 0; i < rows; i++) {
+				assertFalse(grid.getCell(i, j).isAlive());
+			}
+		}
+		
 	}
 	
 }

@@ -15,4 +15,9 @@ public class Cell implements ICell {
 		value = v;
 	}
 	
+	@Override
+	public void switchCellState() {
+		value = !value;
+	}
+	
 }

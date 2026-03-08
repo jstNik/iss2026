@@ -50,16 +50,43 @@ Realizzazione del  in Java del
 	dovrà rispettare.
 	Allo stesso modo l'interfaccia IGrid definirà un metodo che ogni implementazione della griglia dovrà soddisfare: esporrà un metodo ICell getCell(int x, int y) che, 
 	data una coppia di coordinate, ritornerà la cella assegnata a tali coordinate.
+	
+	public interface ICell{
+		
+		public boolean isAlive();
+		public void setStatus(boolean v);
+		void switchCellState();
+		
+	}
+	
+	public interface IGrid {
+			
+		int getRowsNum(); // Primitiva
+		int getColsNum(); // Primitiva
+		ICell getCell(int x, int y); // Primitiva
+		void reset(); // Non primitiva
+			
+	}
 </pre>
  
 
 <h2>Problem analysis</h2>
+
+<img src ="img/LifeGameJava+.jpg">
  
 
 <h2>Test plans</h2> 
-Il test di un'implementazione di ICell potrebbe svilupparsi nel seguente modo: data c una cella di tipo ICell, c.setStatus mi deve ritornare il valore passato, 
-mentre c.isAlive() mi deve ritornare vero se la cella è considerata viva false altrimenti.
+Il test di un'implementazione di ICell potrebbe svilupparsi nel seguente modo: data c una cella di tipo ICell, se passo true a c.setStatus 
+il valore passato c.isAlive() mi deve ritornare vero, se passo false c.isAlive mi deve ritornare false.
+
 Per quanto riguarda la griglia dobbiamo verificare che il metodo getCell() ritorni tutte celle con riferimenti differenti e nessun riferimento nullo.
+Setto il valore della cella e controllo se getCell mi ritorna il valore corretto.
+Reset controllo che tutte le celle siano al valore iniziale.
+Gestire il caso in cui le coordinate siano fuori dai bordi.
+g.getRowsNum e g.getColsNum devono ritornare un valore maggiore o uguale di 0.
+
+
+
 
 
 <h2>Project</h2> 
